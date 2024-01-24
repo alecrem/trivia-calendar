@@ -10,9 +10,5 @@ export default async function Today() {
   const thisMonth = twoDigitFormatter.format(today.getMonth() + 1)
   const todayData = await getDate(today)
   const todayEvent = todayData[0].event
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <DateBox date={thisDate} month={thisMonth} event={todayEvent} />
-    </main>
-  )
+  return <DateBox date={thisDate} month={thisMonth} event={todayEvent} />
 }
