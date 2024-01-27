@@ -1,14 +1,45 @@
-import { getDate } from '@/app/api/db'
+'use client'
+
+import { useState, useEffect } from 'react'
 import { DateBox } from '@/components/DateBox'
 
-export default async function Today() {
-  const today = new Date()
-  const twoDigitFormatter = new Intl.NumberFormat('en-US', {
-    minimumIntegerDigits: 2,
-  })
-  const thisDate = twoDigitFormatter.format(today.getDate())
-  const thisMonth = twoDigitFormatter.format(today.getMonth() + 1)
-  const todayData = await getDate(today)
-  const todayEvent = todayData[0].event
-  return <DateBox date={thisDate} month={thisMonth} event={todayEvent} />
+const twoDigitFormatter = new Intl.NumberFormat('en-US', {
+  minimumIntegerDigits: 2,
+})
+const periodMilliseconds = 3 * 1000
+
+export default function Today() {
+  const [lastUpdated, setLastUpdated] = useState(new Date())
+  const [thisDate, setThisDate] = useState('')
+  const [thisMonth, setThisMonth] = useState('')
+  const [event, setEvent] = useState('')
+
+  const update = async (date: Date) => {
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    setThisMonth(twoDigitFormatter.format(month))
+    setThisDate(twoDigitFormatter.format(day))
+    const todayRes = await fetch(`/api/getdate/${year}/${month}/${day}`)
+    const todayData = await todayRes.json()
+    setEvent(todayData.event)
+  }
+
+  useEffect(() => {
+    const date = new Date()
+    update(date)
+    setLastUpdated(date)
+  }, [])
+  useEffect(() => {
+    const s = setInterval(() => {
+      const date = new Date()
+      if (date.getDate() != lastUpdated.getDate()) {
+        update(date)
+        setLastUpdated(date)
+      }
+    }, periodMilliseconds)
+    return () => clearInterval(s)
+  }, [lastUpdated])
+
+  return <DateBox date={thisDate} month={thisMonth} event={event} />
 }
