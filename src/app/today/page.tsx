@@ -6,7 +6,7 @@ import { DateBox } from '@/components/DateBox'
 const twoDigitFormatter = new Intl.NumberFormat('en-US', {
   minimumIntegerDigits: 2,
 })
-const periodMilliseconds = 50 * 1000
+const periodMilliseconds = 3 * 1000
 
 export default function Today() {
   const [lastUpdated, setLastUpdated] = useState(new Date())
