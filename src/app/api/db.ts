@@ -5,6 +5,7 @@ export async function openDb() {
   return open({
     filename: './data/gamerah-calendario.db',
     driver: sqlite3.Database,
+    mode: sqlite3.OPEN_READONLY,
   })
 }
 
