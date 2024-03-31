@@ -20,9 +20,9 @@ export default function Today() {
     const day = date.getDate()
     setThisMonth(twoDigitFormatter.format(month))
     setThisDate(twoDigitFormatter.format(day))
-    const todayRes = await fetch(`/api/getdate/${year}/${month}/${day}`)
+    const todayRes = await fetch(`/api/getevent/${year}/${month}/${day}`)
     const todayData = await todayRes.json()
-    setEvent(todayData.event)
+    setEvent(todayData.event.event)
   }
 
   useEffect(() => {
