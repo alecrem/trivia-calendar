@@ -1,7 +1,7 @@
 import { headers } from 'next/headers'
 
-export default function Home() {
-  const headersList = headers()
+export default async function Home() {
+  const headersList = await headers()
   const hostname = headersList.get('x-forwarded-host')
   const protocol = headersList.get('x-forwarded-proto')
   console.log(hostname)
