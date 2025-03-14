@@ -15,6 +15,7 @@ export async function getAllData() {
 
 export async function getDate(date: Date) {
   const db = await openDb()
+  console.log('📅getDate', date)
   const yyyyMmDdDate = date.toISOString().substring(0, 10)
   return await db.all(
     `SELECT \`date\`, \`event\` FROM mytable WHERE date ="${yyyyMmDdDate}"`
