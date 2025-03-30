@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.17",
-    "next": "15.2.3",
+    "next": "15.2.4",
     "react": "^19",
     "react-dom": "^19",
     "sqlite": "^5.1.1",
