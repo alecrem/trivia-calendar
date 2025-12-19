@@ -12,7 +12,7 @@
     "@tailwindcss/postcss": "^4.1.17",
     "next": "16.0.10",
     "react": "^19.2.3",
-    "react-dom": "^19.2.1",
+    "react-dom": "^19.2.3",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },
