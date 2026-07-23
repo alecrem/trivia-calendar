@@ -11,7 +11,7 @@
   "dependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "next": "16.2.11",
-    "react": "^19.2.7",
+    "react": "^19.2.8",
     "react-dom": "^19.2.7",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
