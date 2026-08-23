@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { DateBox } from '@/components/DateBox'
 
 const twoDigitFormatter = new Intl.NumberFormat('en-US', {
@@ -14,7 +14,7 @@ export default function Today() {
   const [thisMonth, setThisMonth] = useState('')
   const [event, setEvent] = useState('')
 
-  const update = async (date: Date) => {
+  const update = useCallback(async (date: Date) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
@@ -24,23 +24,23 @@ export default function Today() {
     const todayRes = await fetch(`/api/getdate/${year}/${month}/${day}`)
     const todayData = await todayRes.json()
     setEvent(todayData.event)
-  }
+  }, [])
 
   useEffect(() => {
     const date = new Date()
     update(date)
     setLastUpdated(date)
-  }, [])
+  }, [update])
   useEffect(() => {
     const s = setInterval(() => {
       const date = new Date()
-      if (date.getDate() != lastUpdated.getDate()) {
+      if (date.getDate() !== lastUpdated.getDate()) {
         update(date)
         setLastUpdated(date)
       }
     }, periodMilliseconds)
     return () => clearInterval(s)
-  }, [lastUpdated])
+  }, [lastUpdated, update])
 
   return <DateBox date={thisDate} month={thisMonth} event={event} />
 }
