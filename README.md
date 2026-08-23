@@ -20,6 +20,15 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Checks
+
+Linting and formatting are both handled by [Biome](https://biomejs.dev/):
+
+```bash
+yarn lint    # report formatting, import sorting and lint problems
+yarn format  # apply every fix Biome can apply safely
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
