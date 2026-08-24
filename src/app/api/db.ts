@@ -1,23 +1,19 @@
-import { open } from 'sqlite'
-import sqlite3 from 'sqlite3'
+import { DatabaseSync } from 'node:sqlite'
 
-export async function openDb() {
-  return open({
-    filename: './data/gamerah-calendario.db',
-    driver: sqlite3.Database,
-  })
+export function openDb() {
+  return new DatabaseSync('./data/gamerah-calendario.db', { readOnly: true })
 }
 
-export async function getAllData() {
-  const db = await openDb()
-  return await db.all('SELECT * FROM mytable')
+export function getAllData() {
+  const db = openDb()
+  return db.prepare('SELECT * FROM mytable').all()
 }
 
-export async function getDate(date: Date) {
-  const db = await openDb()
+export function getDate(date: Date) {
+  const db = openDb()
   console.log('📅getDate', date)
   const yyyyMmDdDate = date.toISOString().substring(0, 10)
-  return await db.all(
-    `SELECT \`date\`, \`event\` FROM mytable WHERE date ="${yyyyMmDdDate}"`
-  )
+  return db
+    .prepare('SELECT `date`, `event` FROM mytable WHERE date = ?')
+    .all(yyyyMmDdDate)
 }
