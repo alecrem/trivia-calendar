@@ -5,27 +5,29 @@ const twoDigitFormatter = new Intl.NumberFormat('en-US', {
   minimumIntegerDigits: 2,
 })
 
-type Params = Promise<{ slug: string }>
+type Params = Promise<{ slug: string; month: string; day: string }>
+
+function isValidDatePart(value: number, max: number) {
+  return Number.isInteger(value) && value >= 1 && value <= max
+}
 
 export async function GET(_request: Request, segmentData: { params: Params }) {
-  const { slug } = await segmentData.params
-  console.log('📦slug', slug)
-  const args = slug.split('/')
-  console.log('args', args)
-  const yearParam = args[0]
-  const monthParam = args[1]
-  const dayParam = args[2]
-  console.log('📦searchParams', yearParam, monthParam, dayParam)
+  const { month: monthParam, day: dayParam } = await segmentData.params
 
-  const month = twoDigitFormatter.format(+monthParam)
-  const day = twoDigitFormatter.format(+dayParam)
-  const dateString = `${yearParam}-${month}-${day}T00:00:00.000Z`
-  const requestedDate = new Date(dateString)
-  console.log('📅GET', requestedDate)
-  const data = await getDate(requestedDate)
+  const monthNumber = Number(monthParam)
+  const dayNumber = Number(dayParam)
+  if (!isValidDatePart(monthNumber, 12) || !isValidDatePart(dayNumber, 31))
+    return NextResponse.json(
+      { message: `Invalid date ${monthParam}/${dayParam}` },
+      { status: 400 }
+    )
+
+  const month = twoDigitFormatter.format(monthNumber)
+  const day = twoDigitFormatter.format(dayNumber)
+  const data = await getDate(month, day)
   if (data.length < 1)
     return NextResponse.json(
-      { message: `Data not found for ${requestedDate}` },
+      { message: `Data not found for ${month}-${day}` },
       { status: 404 }
     )
 
