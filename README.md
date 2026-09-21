@@ -32,7 +32,7 @@ pnpm test
 Type checking:
 
 ```bash
-npx tsc --noEmit
+pnpm typecheck
 ```
 
 ## Learn More
