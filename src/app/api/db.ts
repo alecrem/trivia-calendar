@@ -11,9 +11,8 @@ export function getAllData() {
 
 export function getDate(date: Date) {
   const db = openDb()
-  console.log('📅getDate', date)
-  const yyyyMmDdDate = date.toISOString().substring(0, 10)
+  const mmDd = date.toISOString().substring(5, 10)
   return db
-    .prepare('SELECT `date`, `event` FROM mytable WHERE date = ?')
-    .all(yyyyMmDdDate)
+    .prepare('SELECT `date`, `event` FROM mytable WHERE substr(date, 6) = ?')
+    .all(mmDd)
 }

@@ -23,6 +23,18 @@ pnpm lint    # report formatting, import sorting and lint problems
 pnpm format  # apply every fix Biome can apply safely
 ```
 
+Tests use Node's built-in test runner, no extra dependency:
+
+```bash
+pnpm test
+```
+
+Type checking:
+
+```bash
+npx tsc --noEmit
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
