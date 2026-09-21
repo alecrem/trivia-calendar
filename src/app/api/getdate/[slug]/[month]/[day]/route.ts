@@ -7,21 +7,27 @@ const twoDigitFormatter = new Intl.NumberFormat('en-US', {
 
 type Params = Promise<{ slug: string; month: string; day: string }>
 
-export async function GET(_request: Request, segmentData: { params: Params }) {
-  const {
-    slug: yearParam,
-    month: monthParam,
-    day: dayParam,
-  } = await segmentData.params
+function isValidDatePart(value: number, max: number) {
+  return Number.isInteger(value) && value >= 1 && value <= max
+}
 
-  const month = twoDigitFormatter.format(+monthParam)
-  const day = twoDigitFormatter.format(+dayParam)
-  const dateString = `${yearParam}-${month}-${day}T00:00:00.000Z`
-  const requestedDate = new Date(dateString)
-  const data = await getDate(requestedDate)
+export async function GET(_request: Request, segmentData: { params: Params }) {
+  const { month: monthParam, day: dayParam } = await segmentData.params
+
+  const monthNumber = Number(monthParam)
+  const dayNumber = Number(dayParam)
+  if (!isValidDatePart(monthNumber, 12) || !isValidDatePart(dayNumber, 31))
+    return NextResponse.json(
+      { message: `Invalid date ${monthParam}/${dayParam}` },
+      { status: 400 }
+    )
+
+  const month = twoDigitFormatter.format(monthNumber)
+  const day = twoDigitFormatter.format(dayNumber)
+  const data = await getDate(month, day)
   if (data.length < 1)
     return NextResponse.json(
-      { message: `Data not found for ${requestedDate}` },
+      { message: `Data not found for ${month}-${day}` },
       { status: 404 }
     )
 

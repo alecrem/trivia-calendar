@@ -27,3 +27,12 @@ database at `data/gamerah-calendario.db`.
     matches on month-day only (see "Behavior decisions" above).
   - Added a test setup (`node --test`, no new dependency) since the project
     had no automated tests — see README for how to run it.
+  - Added `pnpm typecheck` and a GitHub Actions CI workflow running
+    lint/typecheck/test on every PR and push to main.
+  - Code review on the fix caught two more bugs the previous `month`/`day`
+    parsing had been masking: matching by month-day worked by round-tripping
+    through `new Date(...)`, which silently rolls invalid calendar dates
+    over (e.g. Feb 29 in a non-leap year normalized to Mar 1); and
+    non-numeric `month`/`day` params threw an unhandled `RangeError` instead
+    of a 4xx response. `getDate()` now takes `month`/`day` strings directly
+    (no `Date` round-trip), and the route validates them before querying.
